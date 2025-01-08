@@ -5,11 +5,6 @@ const aracModel = document.querySelector("#aracmodel");
 const aracMarka = document.querySelector("#marka");
 const üretimyili = document.querySelector("#üretimyili");
 const aracRenk = document.querySelector("#aracrenk");
-const telefon = document.querySelector("#telefonnum");
-const adsoyad = document.querySelector("#adsoyad");
-const mail = document.querySelector("#mail");
-const aracdurum = document.querySelector("#aracdurum");
-const plaka = document.querySelector("#plakauyruk");
 
 const monthNames = [
   "Ocak",
@@ -32,7 +27,6 @@ const yil = tarih.getFullYear();
 const gün = tarih.getUTCDate();
 
 class Vehicle {
-  static idCounter = 1;
   #id;
   #date;
   #model;
@@ -40,6 +34,7 @@ class Vehicle {
   #engine;
   #detail;
   #km = 0;
+  static #vehicles = 1;
 
   constructor(
     vehicleDate,
@@ -49,7 +44,7 @@ class Vehicle {
     vehicledesc,
     vehicleKM
   ) {
-    this.#id = Vehicle.idCounter++;
+    this.#id = Vehicle.#vehicles++;
     this.#date = vehicleDate;
     this.#model = {
       year: vehicleModel.year,
@@ -80,13 +75,19 @@ class Vehicle {
 
   get vehicleDetails() {
     return {
-      id: this.#id,
-      owner: { ...this.#owner.ownerDetail },
+      owner: {
+        ...this.#owner.ownerDetail,
+      },
       vehicle: {
+        id: this.#id,
         date: this.#date,
         model: this.#model,
-        engine: { ...this.#engine.engineDetails },
-        detail: { ...this.#detail.detailInfo },
+        engine: {
+          ...this.#engine.engineDetails,
+        },
+        detail: {
+          ...this.#detail.detailInfo,
+        },
         km: this.#km,
       },
     };
@@ -178,13 +179,22 @@ class Engine {
   }
 }
 
-class AracFilosu {
+class AracFilosu extends Vehicle {
   #vehicles;
 
-  constructor() {
+  constructor(
+    date,
+    model = {},
+    owner = {},
+    engineDetails = {},
+    vehicledesc = {},
+    km
+  ) {
+    super(date, model, owner, engineDetails, vehicledesc, km);
     this.#vehicles = new Map();
   }
 
+  // Araç ekleme
   addVehicle(
     date,
     model = {},
@@ -214,46 +224,70 @@ class AracFilosu {
   }
 
   allCars() {
-    return Array.from(this.#vehicles.values()).map(
-      (arac) => arac.vehicleDetails
-    );
+    return Array.from(this.#vehicles.values()).map((arac) => {
+      const details = arac.vehicleDetails;
+      return {
+        owner: {
+          ...details.owner,
+        },
+        vehicle: {
+          ...details.vehicle,
+        },
+      };
+    });
   }
 }
 
 const filo = new AracFilosu();
 const testbtn = document.getElementById("testbtn");
 
-testbtn.addEventListener("click", () => {
-  try {
-    const aracId = filo.addVehicle(
-      `${gün} ${monthNames[ay]} ${yil}`, // yayın tarihi
-      {
-        year: üretimyili.value, // üretim yılı
-        modelName: aracModel.value, // model
-        company: aracMarka.value, // marka
-      },
-      { phone: telefon.value, name: adsoyad.value, mail: mail.value }, // ilan sahibi bilgileri
-      { fuel: fuel, hp: aracHP.value, gear: gear }, // motor bilgileri
-      {
-        color: aracRenk.value,
-        traction: traction, // çekiş (önden,arkadan,dört teker)
-        warranty: warranty, // garanti durumu
-        vehicleStatus: aracdurum.value,
-        plateCountry: plaka.value,
-        trade: trade, // takas
-        from: from, // kimden (sahibinden, galeriden)
-      },
-      aracKM.value // araç km
-    );
+testbtn.addEventListener("click", (e) => {
+  // if (üretimyili.value == "") {
+  //   throw new Error("Üretim Yılıni Girin");
+  // } else if (aracModel.value == "") {
+  //   throw new Error("Araç Modelini Girin");
+  // } else if (aracMarka.value == "") {
+  //   throw new Error("Araç Markasını Girin");
+  // } else if (selectedFuel == "") {
+  //   throw new Error("Yakıt Tipini Seçin");
+  // }
+  const aracId = filo.addVehicle(
+    gün + " " + monthNames[ay] + " " + yil, // yayın tarihi
+    {
+      year: üretimyili.value, // üretim yılı
+      modelName: aracModel.value, // model
+      company: aracMarka.value, // marka
+    },
+    { phone: 13213531, name: "ahmet", mail: "basdasdada@gmail.com" }, // ilan sahibi bilgileri
+    { fuel: fuel, hp: aracHP.value, gear: "Manuel" }, // motor bilgileri
+    {
+      color: aracRenk.value,
+      traction: traction,
+      warranty: warranty,
+      vehicleStatus: "2.El",
+      plateCountry: "TR",
+      trade: trade,
+      from: from,
+    },
+    aracKM.value // araç km
+  );
 
-    console.log(filo.allCars());
-    test.innerHTML = JSON.stringify(filo.allCars(), null, 2);
-  } catch (err) {
-    console.error(err.message);
-  }
+  const arac = filo.getVehicle(aracId);
+  arac.changeOwner({
+    phone: 99999,
+    name: "berkant",
+    mail: "asdasda@gmail.com",
+  });
+  console.log(filo.allCars());
+
+  test.innerHTML = JSON.stringify(filo.allCars());
 });
 
-var fuel, traction, from, warranty, trade, gear;
+var fuel;
+var traction;
+var from;
+var warranty;
+var trade;
 
 function selectFuel(browser) {
   fuel = browser;
@@ -273,8 +307,4 @@ function selectWarranty(browser) {
 
 function selectTrade(browser) {
   trade = browser;
-}
-
-function selectGear(browser) {
-  gear = browser;
 }
