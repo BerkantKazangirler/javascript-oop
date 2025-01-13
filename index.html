@@ -4,217 +4,221 @@
     <meta charset="UTF-8" />
     <title>JS OOP</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="./css/output.css" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body>
     <p class="text-3xl text-red-600 font-bold underline" id="demo"></p>
 
-    <div class="flex flex-row gap-2">
-      <h3>Araç Bilgileri</h3>
-      <input type="number" placeholder="Araç KM" id="arackm" />
-      <input type="number" placeholder="Araç HP" id="arachp" />
-      <input type="text" placeholder="Araç Model" id="aracmodel" />
-      <input type="text" placeholder="Marka" id="marka" />
-      <input type="number" placeholder="Üretim Yılı" id="üretimyili" />
-      <input type="text" placeholder="Renk" id="aracrenk" />
-    </div>
-    <div class="flex flex-row gap-2">
-      <h3>Satıcı Bilgileri</h3>
-      <input type="number" placeholder="Telefon" id="telefonnum" />
-      <input type="text" placeholder="Ad Soyad" id="adsoyad" />
-      <input type="text" placeholder="Mail Adresi" id="mail" />
-    </div>
-    <div class="flex flex-col gap-2">
-      <h3>Ek Bilgiler</h3>
-      <div class="flex flex-col gap-2">
-        <span class="text-red-600">Araç Çekişi</span>
-        <div>
-          <label for="öndencekis">Önden Çekiş</label>
-          <input
-            type="radio"
-            name="cekis"
-            id="öndencekis"
-            value="Önden Çekiş"
-            onclick="selectTraction(this.value)"
-          />
-        </div>
-        <div>
-          <label for="arkadancekis">Arkadan Çekiş</label>
-          <input
-            type="radio"
-            name="cekis"
-            id="arkadancekis"
-            value="Arkadan Çekiş"
-            onclick="selectTraction(this.value)"
-          />
-        </div>
-        <div>
-          <label for="dörtteker">Dört Teker</label>
-          <input
-            type="radio"
-            name="cekis"
-            id="dörtteker"
-            value="Dört Teker"
-            onclick="selectTraction(this.value)"
-          />
-        </div>
-      </div>
-      <div class="flex flex-col gap-2">
-        <span class="text-red-600">Benzin Tipi</span>
-        <div>
-          <label for="benzin">benzin</label>
-          <input
-            type="radio"
-            id="benzin"
-            name="yakit"
-            onclick="selectFuel(this.value)"
-            value="benzin"
-          />
-        </div>
+    <p class="text-orange-600" id="demoall"></p>
 
-        <div>
-          <label for="dizel">dizel </label>
-          <input
-            type="radio"
-            id="dizel"
-            name="yakit"
-            onclick="selectFuel(this.value)"
-            value="dizel"
-          />
-        </div>
+    <div>
+      <div class="flex flex-row gap-2">
+        <h3>Araç Bilgileri</h3>
+        <input type="number" placeholder="Araç KM" id="arackm" />
+        <input type="number" placeholder="Araç HP" id="arachp" />
+        <input type="text" placeholder="Araç Model" id="aracmodel" />
+        <input type="text" placeholder="Marka" id="marka" />
+        <input type="number" placeholder="Üretim Yılı" id="üretimyili" />
+        <input type="text" placeholder="Renk" id="aracrenk" />
+      </div>
+      <div class="flex flex-row gap-2">
+        <h3>Satıcı Bilgileri</h3>
+        <input type="number" placeholder="Telefon" id="telefonnum" />
+        <input type="text" placeholder="Ad Soyad" id="adsoyad" />
+        <input type="text" placeholder="Mail Adresi" id="mail" />
       </div>
       <div class="flex flex-col gap-2">
-        <span class="text-red-600">Satan Kişi</span>
-        <div>
-          <label for="sahibinden">Sahibinden</label>
-          <input
-            type="radio"
-            name="kimden"
-            id="sahibinden"
-            value="Sahibinden"
-            onclick="selectFrom(this.value)"
-          />
+        <h3>Ek Bilgiler</h3>
+        <div class="flex flex-col gap-2">
+          <span class="text-red-600">Araç Çekişi</span>
+          <div>
+            <label for="öndencekis">Önden Çekiş</label>
+            <input
+              type="radio"
+              name="cekis"
+              id="öndencekis"
+              value="Önden Çekiş"
+              onclick="selectTraction(this.value)"
+            />
+          </div>
+          <div>
+            <label for="arkadancekis">Arkadan Çekiş</label>
+            <input
+              type="radio"
+              name="cekis"
+              id="arkadancekis"
+              value="Arkadan Çekiş"
+              onclick="selectTraction(this.value)"
+            />
+          </div>
+          <div>
+            <label for="dörtteker">Dört Teker</label>
+            <input
+              type="radio"
+              name="cekis"
+              id="dörtteker"
+              value="Dört Teker"
+              onclick="selectTraction(this.value)"
+            />
+          </div>
         </div>
-        <div>
-          <label for="galeriden">Galeriden</label>
-          <input
-            type="radio"
-            name="kimden"
-            id="galeriden"
-            value="Galeriden"
-            onclick="selectFrom(this.value)"
-          />
+        <div class="flex flex-col gap-2">
+          <span class="text-red-600">Benzin Tipi</span>
+          <div>
+            <label for="benzin">benzin</label>
+            <input
+              type="radio"
+              id="benzin"
+              name="yakit"
+              onclick="selectFuel(this.value)"
+              value="benzin"
+            />
+          </div>
+
+          <div>
+            <label for="dizel">dizel </label>
+            <input
+              type="radio"
+              id="dizel"
+              name="yakit"
+              onclick="selectFuel(this.value)"
+              value="dizel"
+            />
+          </div>
+        </div>
+        <div class="flex flex-col gap-2">
+          <span class="text-red-600">Satan Kişi</span>
+          <div>
+            <label for="sahibinden">Sahibinden</label>
+            <input
+              type="radio"
+              name="kimden"
+              id="sahibinden"
+              value="Sahibinden"
+              onclick="selectFrom(this.value)"
+            />
+          </div>
+          <div>
+            <label for="galeriden">Galeriden</label>
+            <input
+              type="radio"
+              name="kimden"
+              id="galeriden"
+              value="Galeriden"
+              onclick="selectFrom(this.value)"
+            />
+          </div>
+        </div>
+        <div class="flex flex-col gap-2">
+          <span class="text-red-600">Garanti Durumu</span>
+          <div>
+            <label for="garantivar">Var</label>
+            <input
+              type="radio"
+              name="garanti"
+              id="garantivar"
+              value="true"
+              onclick="selectWarranty(this.value)"
+            />
+          </div>
+          <div>
+            <label for="garantiyok">Yok</label>
+            <input
+              type="radio"
+              name="garanti"
+              id="garantiyok"
+              value="false"
+              onclick="selectWarranty(this.value)"
+            />
+          </div>
+        </div>
+        <div class="flex flex-col gap-2">
+          <span class="text-red-600">Takas</span>
+          <div>
+            <label for="takasvar">Var</label>
+            <input
+              type="radio"
+              name="takas"
+              id="takasvar"
+              value="Var"
+              onclick="selectTrade(this.value)"
+            />
+          </div>
+          <div>
+            <label for="takasyok">Yok</label>
+            <input
+              type="radio"
+              name="takas"
+              id="takasyok"
+              value="Yok"
+              onclick="selectTrade(this.value)"
+            />
+          </div>
+        </div>
+        <div class="flex flex-col gap-2">
+          <span class="text-red-600">Araç Durumu</span>
+          <div>
+            <select name="aracdurum" id="aracdurum">
+              <option value="0">0</option>
+              <option value="2.El">2. El</option>
+              <option value="3.El">3. El</option>
+              <option value="4.El">4. El</option>
+            </select>
+          </div>
+        </div>
+        <div class="flex flex-col gap-2">
+          <span class="text-red-600">Plaka / Uyruk</span>
+          <div>
+            <select name="plakauyruk" id="plakauyruk">
+              <option value="TR / Turkey">TR</option>
+              <option value="US / United States">US</option>
+              <option value="UK / United Kingdom">UK</option>
+              <option value="CA / Canada">CA</option>
+              <option value="DE / Germany">DE</option>
+              <option value="FR / France">FR</option>
+              <option value="IT / Italy">IT</option>
+              <option value="ES / Spain">ES</option>
+              <option value="JP / Japan">JP</option>
+              <option value="CN / China">CN</option>
+              <option value="IN / India">IN</option>
+              <option value="BR / Brazil">BR</option>
+              <option value="AU / Australia">AU</option>
+              <option value="ZA / South Africa">ZA</option>
+              <option value="MX / Mexico">MX</option>
+              <option value="RU / Russia">RU</option>
+              <option value="KR / South Korea">KR</option>
+              <option value="AR / Argentina">AR</option>
+              <option value="SE / Sweden">SE</option>
+              <option value="NL / Netherlands">NL</option>
+            </select>
+          </div>
+        </div>
+        <div class="flex flex-col gap-2">
+          <span class="text-red-600">Vites</span>
+          <div>
+            <label for="otomatik">Otomatik</label>
+            <input
+              type="radio"
+              name="vites"
+              id="otomatik"
+              value="Otomatik"
+              onclick="selectGear(this.value)"
+            />
+          </div>
+          <div>
+            <label for="manuel">Manuel</label>
+            <input
+              type="radio"
+              name="vites"
+              id="manuel"
+              value="Manuel"
+              onclick="selectGear(this.value)"
+            />
+          </div>
         </div>
       </div>
-      <div class="flex flex-col gap-2">
-        <span class="text-red-600">Garanti Durumu</span>
-        <div>
-          <label for="garantivar">Var</label>
-          <input
-            type="radio"
-            name="garanti"
-            id="garantivar"
-            value="true"
-            onclick="selectWarranty(this.value)"
-          />
-        </div>
-        <div>
-          <label for="garantiyok">Yok</label>
-          <input
-            type="radio"
-            name="garanti"
-            id="garantiyok"
-            value="false"
-            onclick="selectWarranty(this.value)"
-          />
-        </div>
-      </div>
-      <div class="flex flex-col gap-2">
-        <span class="text-red-600">Takas</span>
-        <div>
-          <label for="takasvar">Var</label>
-          <input
-            type="radio"
-            name="takas"
-            id="takasvar"
-            value="Var"
-            onclick="selectTrade(this.value)"
-          />
-        </div>
-        <div>
-          <label for="takasyok">Yok</label>
-          <input
-            type="radio"
-            name="takas"
-            id="takasyok"
-            value="Yok"
-            onclick="selectTrade(this.value)"
-          />
-        </div>
-      </div>
-      <div class="flex flex-col gap-2">
-        <span class="text-red-600">Araç Durumu</span>
-        <div>
-          <select name="aracdurum" id="aracdurum">
-            <option value="0">0</option>
-            <option value="2.El">2. El</option>
-            <option value="3.El">3. El</option>
-            <option value="4.El">4. El</option>
-          </select>
-        </div>
-      </div>
-      <div class="flex flex-col gap-2">
-        <span class="text-red-600">Plaka / Uyruk</span>
-        <div>
-          <select name="plakauyruk" id="plakauyruk">
-            <option value="TR / Turkey">TR</option>
-            <option value="US / United States">US</option>
-            <option value="UK / United Kingdom">UK</option>
-            <option value="CA / Canada">CA</option>
-            <option value="DE / Germany">DE</option>
-            <option value="FR / France">FR</option>
-            <option value="IT / Italy">IT</option>
-            <option value="ES / Spain">ES</option>
-            <option value="JP / Japan">JP</option>
-            <option value="CN / China">CN</option>
-            <option value="IN / India">IN</option>
-            <option value="BR / Brazil">BR</option>
-            <option value="AU / Australia">AU</option>
-            <option value="ZA / South Africa">ZA</option>
-            <option value="MX / Mexico">MX</option>
-            <option value="RU / Russia">RU</option>
-            <option value="KR / South Korea">KR</option>
-            <option value="AR / Argentina">AR</option>
-            <option value="SE / Sweden">SE</option>
-            <option value="NL / Netherlands">NL</option>
-          </select>
-        </div>
-      </div>
-      <div class="flex flex-col gap-2">
-        <span class="text-red-600">Vites</span>
-        <div>
-          <label for="otomatik">Otomatik</label>
-          <input
-            type="radio"
-            name="vites"
-            id="otomatik"
-            value="Otomatik"
-            onclick="selectGear(this.value)"
-          />
-        </div>
-        <div>
-          <label for="manuel">Manuel</label>
-          <input
-            type="radio"
-            name="vites"
-            id="manuel"
-            value="Manuel"
-            onclick="selectGear(this.value)"
-          />
-        </div>
-      </div>
+      <button type="button" id="savebtn">gönder</button>
     </div>
-    <button type="button" id="testbtn">gönder</button>
   </body>
   <script src="./js/main.js"></script>
 </html>

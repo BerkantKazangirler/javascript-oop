@@ -1,4 +1,5 @@
 const test = document.querySelector("#demo");
+const testall = document.querySelector("#demoall");
 const aracKM = document.querySelector("#arackm");
 const aracHP = document.querySelector("#arachp");
 const aracModel = document.querySelector("#aracmodel");
@@ -221,36 +222,47 @@ class AracFilosu {
 }
 
 const filo = new AracFilosu();
-const testbtn = document.getElementById("testbtn");
+const savebutton = document.getElementById("savebtn");
 
-testbtn.addEventListener("click", () => {
-  try {
-    const aracId = filo.addVehicle(
-      `${gün} ${monthNames[ay]} ${yil}`, // yayın tarihi
-      {
-        year: üretimyili.value, // üretim yılı
-        modelName: aracModel.value, // model
-        company: aracMarka.value, // marka
-      },
-      { phone: telefon.value, name: adsoyad.value, mail: mail.value }, // ilan sahibi bilgileri
-      { fuel: fuel, hp: aracHP.value, gear: gear }, // motor bilgileri
-      {
-        color: aracRenk.value,
-        traction: traction, // çekiş (önden,arkadan,dört teker)
-        warranty: warranty, // garanti durumu
-        vehicleStatus: aracdurum.value,
-        plateCountry: plaka.value,
-        trade: trade, // takas
-        from: from, // kimden (sahibinden, galeriden)
-      },
-      aracKM.value // araç km
-    );
+savebutton.addEventListener("click", () => {
+  const newVehicleId = filo.addVehicle(
+    `${gün} ${monthNames[ay]} ${yil}`,
+    {
+      year: üretimyili.value,
+      modelName: aracModel.value,
+      company: aracMarka.value,
+    },
+    { phone: telefon.value, name: adsoyad.value, mail: mail.value },
+    { fuel: fuel, hp: aracHP.value, gear: gear },
+    {
+      color: aracRenk.value,
+      traction: traction,
+      warranty: warranty,
+      vehicleStatus: aracdurum.value,
+      plateCountry: plaka.value,
+      trade: trade,
+      from: from,
+    },
+    aracKM.value
+  );
 
-    console.log(filo.allCars());
-    test.innerHTML = JSON.stringify(filo.allCars(), null, 2);
-  } catch (err) {
-    console.error(err.message);
-  }
+  const vehicleData = filo.getVehicle(newVehicleId).vehicleDetails;
+
+  fetch("http://localhost:3000/datas", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(vehicleData),
+  })
+    .then((res) => res.json())
+    .finally(loadDatas());
+
+  test.innerHTML = JSON.stringify(filo.allCars(), null, 2);
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  loadDatas();
 });
 
 var fuel, traction, from, warranty, trade, gear;
@@ -277,4 +289,14 @@ function selectTrade(browser) {
 
 function selectGear(browser) {
   gear = browser;
+}
+
+function loadDatas() {
+  fetch("http://localhost:3000/datas")
+    .then((res) => res.json())
+    .then((data) => {
+      const ownerNames = data.map((item) => item.owner.name);
+      testall.innerHTML = `<pre>${ownerNames.join(", ")}</pre>`;
+    })
+    .catch((error) => console.error("Veri yüklenirken hata oluştu:", error));
 }
