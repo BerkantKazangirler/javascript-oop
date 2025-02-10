@@ -1,10 +1,16 @@
 const test = document.querySelector("#demo");
+const testall = document.querySelector("#demoall");
 const aracKM = document.querySelector("#arackm");
 const aracHP = document.querySelector("#arachp");
 const aracModel = document.querySelector("#aracmodel");
 const aracMarka = document.querySelector("#marka");
 const üretimyili = document.querySelector("#üretimyili");
 const aracRenk = document.querySelector("#aracrenk");
+const telefon = document.querySelector("#telefonnum");
+const adsoyad = document.querySelector("#adsoyad");
+const mail = document.querySelector("#mail");
+const aracdurum = document.querySelector("#aracdurum");
+const plaka = document.querySelector("#plakauyruk");
 
 const monthNames = [
   "Ocak",
@@ -27,6 +33,7 @@ const yil = tarih.getFullYear();
 const gün = tarih.getUTCDate();
 
 class Vehicle {
+  static idCounter = 1;
   #id;
   #date;
   #model;
@@ -34,7 +41,6 @@ class Vehicle {
   #engine;
   #detail;
   #km = 0;
-  static #vehicles = 1;
 
   constructor(
     vehicleDate,
@@ -44,7 +50,7 @@ class Vehicle {
     vehicledesc,
     vehicleKM
   ) {
-    this.#id = Vehicle.#vehicles++;
+    this.#id = Vehicle.idCounter++;
     this.#date = vehicleDate;
     this.#model = {
       year: vehicleModel.year,
@@ -75,19 +81,13 @@ class Vehicle {
 
   get vehicleDetails() {
     return {
-      owner: {
-        ...this.#owner.ownerDetail,
-      },
+      id: this.#id,
+      owner: { ...this.#owner.ownerDetail },
       vehicle: {
-        id: this.#id,
         date: this.#date,
         model: this.#model,
-        engine: {
-          ...this.#engine.engineDetails,
-        },
-        detail: {
-          ...this.#detail.detailInfo,
-        },
+        engine: { ...this.#engine.engineDetails },
+        detail: { ...this.#detail.detailInfo },
         km: this.#km,
       },
     };
@@ -179,22 +179,13 @@ class Engine {
   }
 }
 
-class AracFilosu extends Vehicle {
+class AracFilosu {
   #vehicles;
 
-  constructor(
-    date,
-    model = {},
-    owner = {},
-    engineDetails = {},
-    vehicledesc = {},
-    km
-  ) {
-    super(date, model, owner, engineDetails, vehicledesc, km);
+  constructor() {
     this.#vehicles = new Map();
   }
 
-  // Araç ekleme
   addVehicle(
     date,
     model = {},
@@ -224,70 +215,57 @@ class AracFilosu extends Vehicle {
   }
 
   allCars() {
-    return Array.from(this.#vehicles.values()).map((arac) => {
-      const details = arac.vehicleDetails;
-      return {
-        owner: {
-          ...details.owner,
-        },
-        vehicle: {
-          ...details.vehicle,
-        },
-      };
-    });
+    return Array.from(this.#vehicles.values()).map(
+      (arac) => arac.vehicleDetails
+    );
   }
 }
 
 const filo = new AracFilosu();
-const testbtn = document.getElementById("testbtn");
+const savebutton = document.getElementById("savebtn");
 
-testbtn.addEventListener("click", (e) => {
-  // if (üretimyili.value == "") {
-  //   throw new Error("Üretim Yılıni Girin");
-  // } else if (aracModel.value == "") {
-  //   throw new Error("Araç Modelini Girin");
-  // } else if (aracMarka.value == "") {
-  //   throw new Error("Araç Markasını Girin");
-  // } else if (selectedFuel == "") {
-  //   throw new Error("Yakıt Tipini Seçin");
-  // }
-  const aracId = filo.addVehicle(
-    gün + " " + monthNames[ay] + " " + yil, // yayın tarihi
+savebutton.addEventListener("click", () => {
+  const newVehicleId = filo.addVehicle(
+    `${gün} ${monthNames[ay]} ${yil}`,
     {
-      year: üretimyili.value, // üretim yılı
-      modelName: aracModel.value, // model
-      company: aracMarka.value, // marka
+      year: üretimyili.value,
+      modelName: aracModel.value,
+      company: aracMarka.value,
     },
-    { phone: 13213531, name: "ahmet", mail: "basdasdada@gmail.com" }, // ilan sahibi bilgileri
-    { fuel: fuel, hp: aracHP.value, gear: "Manuel" }, // motor bilgileri
+    { phone: telefon.value, name: adsoyad.value, mail: mail.value },
+    { fuel: fuel, hp: aracHP.value, gear: gear },
     {
       color: aracRenk.value,
       traction: traction,
       warranty: warranty,
-      vehicleStatus: "2.El",
-      plateCountry: "TR",
+      vehicleStatus: aracdurum.value,
+      plateCountry: plaka.value,
       trade: trade,
       from: from,
     },
-    aracKM.value // araç km
+    aracKM.value
   );
 
-  const arac = filo.getVehicle(aracId);
-  arac.changeOwner({
-    phone: 99999,
-    name: "berkant",
-    mail: "asdasda@gmail.com",
-  });
-  console.log(filo.allCars());
+  const vehicleData = filo.getVehicle(newVehicleId).vehicleDetails;
 
-  test.innerHTML = JSON.stringify(filo.allCars());
+  fetch("http://localhost:3000/datas", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(vehicleData),
+  })
+    .then((res) => res.json())
+    .finally(loadDatas());
+
+  test.innerHTML = JSON.stringify(filo.allCars(), null, 2);
 });
 
-var fuel;
-var traction;
-var from;
-var warranty;
-var trade;
+document.addEventListener("DOMContentLoaded", () => {
+  loadDatas();
+});
+
+var fuel, traction, from, warranty, trade, gear;
 
 function selectFuel(browser) {
   fuel = browser;
@@ -307,4 +285,24 @@ function selectWarranty(browser) {
 
 function selectTrade(browser) {
   trade = browser;
+}
+
+function selectGear(browser) {
+  gear = browser;
+}
+
+var ownerNames,
+  models = [];
+
+function loadDatas() {
+  fetch("http://localhost:3000/datas")
+    .then((res) => res.json())
+    .then((data) => {
+      ownerNames = data.map((item) => item.owner.name);
+      models = data.map((item) => item.vehicle.model.modelName);
+      console.log(models);
+
+      testall.innerHTML = `<pre>${ownerNames.join(", ")}</pre>`;
+    })
+    .catch((error) => console.error("Veri yüklenirken hata oluştu:", error));
 }
